@@ -57,13 +57,13 @@ var pool = Stratum.createPool({
             "host": "127.0.0.1",
             "port": 8349,
             "user": "rpc_florijncoin",
-            "password": "6g9030c7c181551ed66740bcc"
+            "password": "clean"
         },
         {   //Backup daemon instance
             "host": "127.0.0.1",
             "port": 8349,
             "user": "rpc_florijncoin",
-            "password": "6g9030c7c181551ed66740bcc"
+            "password": "clean"
         }
     ],
 
@@ -85,4 +85,22 @@ var pool = Stratum.createPool({
         authorized: true,
         disconnect: false
     });
+});
+
+pool.on('share', function(isValidShare, isValidBlock, data){
+
+    if (isValidBlock)
+        console.log('Block found');
+    else if (isValidShare)
+        console.log('Valid share submitted');
+    else if (data.blockHash)
+        console.log('We thought a block was found but it was rejected by the daemon');
+    else
+        console.log('Invalid share submitted')
+
+    console.log('share data: ' + JSON.stringify(data));
+});
+
+pool.on('log', function(severity, logKey, logText){
+    console.log(severity + ': ' + '[' + logKey + '] ' + logText);
 });
